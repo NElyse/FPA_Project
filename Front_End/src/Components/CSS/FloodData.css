@@ -1,0 +1,15 @@
+/* FloodData.css */
+
+/* Basic styling for flood data container */
+.flood-data-container {
+    padding: 20px;
+    background-color: #f4f7fa;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  

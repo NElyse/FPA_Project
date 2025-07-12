@@ -1,0 +1,215 @@
+/* Container layout */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background-color: rgba(245, 247, 250, 0.9); /* Slightly transparent light bg */
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: rgba(30, 64, 175, 0.7); /* Blue-800 with 70% opacity */
+  color: rgba(255, 255, 255, 0.85); /* White text with 85% opacity */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-sizing: border-box;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.sidebar-close-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.75rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-item {
+  padding: 0.75rem 0;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.sidebar-item:hover {
+  color: rgba(147, 197, 253, 0.7); /* Blue-300 with 70% opacity */
+}
+
+/* Sidebar toggle button (when sidebar hidden) */
+.sidebar-toggle-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background-color: rgba(30, 64, 175, 0.7);
+  color: rgba(255, 255, 255, 0.85);
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* Main content area */
+.main-content {
+  margin-left: 240px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: margin-left 0.3s ease;
+}
+
+/* When sidebar hidden, main content takes full width */
+.main-content.full-width {
+  margin-left: 0 !important;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(30, 64, 175, 0.7);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0 1rem;
+  height: 56px;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.sidebar-toggle-button-desktop {
+  display: none;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: rgba(147, 197, 253, 0.7);
+}
+
+.username {
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+.profile-dropdown-wrapper {
+  position: relative;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 130%;
+  right: 0;
+  background: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  min-width: 120px;
+  z-index: 1001;
+}
+
+.dropdown-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: rgba(0, 0, 0, 0.7);
+  text-decoration: none;
+}
+
+.dropdown-link:hover {
+  background-color: rgba(224, 231, 255, 0.7); /* Light blue */
+}
+
+/* Content area */
+.content-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+
+/* Footer */
+.footer {
+  background-color: rgba(30, 64, 175, 0.7);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.75rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1100;
+    height: 100vh;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .sidebar-toggle-button-desktop {
+    display: inline-block;
+  }
+}

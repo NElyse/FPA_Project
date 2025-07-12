@@ -1,0 +1,111 @@
+/* ============ Register Form Styles ============ */
+
+.form-container {
+  max-width: 450px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+/* Error & Success messages */
+.erroor-register {
+  color: #d8000c;
+  background-color: #ffd2d2;
+  border: 1px solid #d8000c;
+  padding: 6px 10px;
+  margin: 6px 0;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+.successs-register {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 6px 10px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+/* Buttons */
+.register-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.register-buttons-container button {
+  flex: 1;
+  padding: 10px 0;
+  font-weight: 600;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.register-button:hover {
+  background-color: #388e3c;
+}
+
+.cancel-button-register {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.cancel-button-register:hover {
+  background-color: #f1b0b7;
+}
+
+/* Switch to login link */
+.form-switch-text-register {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555555;
+  text-align: center;
+}
+
+.form-link-register {
+  background: none;
+  border: none;
+  color: #3a8ee6;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  margin-left: 5px;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.form-link-register:hover {
+  color: #265eac;
+}

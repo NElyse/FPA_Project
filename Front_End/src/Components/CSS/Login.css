@@ -1,0 +1,103 @@
+/* Fix button disabled visual bugs */
+button:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+button:enabled {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Ensure login button is always interactive unless disabled explicitly */
+.login-button {
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 0;
+  flex: 1;
+  font-weight: 600;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #1769aa;
+}
+
+.cancel-button-login {
+  background-color: #e0e0e0;
+  color: #424242;
+}
+
+.cancel-button-login:hover {
+  background-color: #bdbdbd;
+}
+
+.login-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.erroor {
+  color: #d8000c;
+  background-color: #ffd2d2;
+  border: 1px solid #d8000c;
+  padding: 6px 10px;
+  margin: 6px 0;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.form-container {
+  max-width: 450px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.form-switch-text-register {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555555;
+  text-align: center;
+}
+
+.form-link-register {
+  background: none;
+  border: none;
+  color: #3a8ee6;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
+  margin-left: 5px;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.form-link-register:hover {
+  color: #265eac;
+}

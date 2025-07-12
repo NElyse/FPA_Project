@@ -1,0 +1,176 @@
+/* Full-screen layout */
+.home-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Background Image Slideshow */
+.bg-slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.bg-slide.active {
+  opacity: 1; /* visible */
+  z-index: 1;
+}
+
+.bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+/* Centered hero content */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  height: 100vh;
+  display: flex;
+  align-items: center;      /* vertical center */
+  justify-content: center;  /* horizontal center */
+  padding: 2rem;
+  text-align: center;
+  user-select: none;
+}
+
+/* Glass effect card with low opacity */
+.content-card {
+  background: rgba(132, 60, 225, 0.15); /* translucent purple */
+  border-radius: 1rem;
+  padding: 2.5rem 3rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: white;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(24, 24, 24, 0.3);
+  user-select: none;
+}
+
+/* Text styles */
+.hero-subtitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.hero-title {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+.hero-description {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Buttons container with equal-sized buttons */
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Wrapper for Login & Register buttons */
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 320px;
+  justify-content: center;
+}
+
+/* Buttons styling */
+.btn-auth {
+  flex: 1;
+  padding: 12px 0;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  color: white;
+  /* No background here, use specific classes */
+}
+
+/* Login button - purple shade matching glass */
+.login-btn {
+  background-color: #6c44e0;
+}
+
+.login-btn:hover,
+.login-btn:focus {
+  background-color: #502bb8;
+  outline: none;
+}
+
+/* Register button - lighter purple */
+.register-btn {
+  background-color: #8b66f7;
+}
+
+.register-btn:hover,
+.register-btn:focus {
+  background-color: #6e47cc;
+  outline: none;
+}
+
+/* Forgot password link container */
+.forgot-password-link {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #e0e0ff;
+  user-select: none;
+}
+
+/* Reset password link button */
+.link-reset-password {
+  background: none;
+  border: none;
+  color: #a0a6ff;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  user-select: none;
+}
+
+.link-reset-password:hover,
+.link-reset-password:focus {
+  color: #7a7fff;
+  outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .auth-buttons {
+    flex-direction: column;
+  }
+}
