@@ -5,6 +5,8 @@ const cors = require('cors');
 
 const userLoginRoutes = require('./Routes/userLoginRoutes');
 const floodDataRoutes = require('./Routes/floodDataRoutes');
+const floodPridictionRoutes = require("./Routes/FloodPridictionRoutes");
+
 
 const app = express();
 
@@ -13,7 +15,8 @@ app.use(express.json());
 
 // Routes
 app.use('/api/userLoginRoutes', userLoginRoutes);
-app.use('/api/flood', floodDataRoutes);
+app.use('/api/floodDataRoutes', floodDataRoutes);
+app.use("/api/floodPridictionRoutes", floodPridictionRoutes);
 
 // Serve React build
 app.use(express.static(path.join(__dirname, '../Front_End/build')));

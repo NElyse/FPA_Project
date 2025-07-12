@@ -8,8 +8,11 @@ import ForgotPassword from './Components/Auth/ForgotPassword';
 import ResetPasswordModal from './Components/Auth/ResetPasswordModal';
 
 
+
+
 import HomePage from './Components/Home/HomePage'; 
 import Profile from './Components/Home/Profile'; 
+
 
 
 
@@ -18,6 +21,7 @@ import Profile from './Components/Home/Profile';
 import FloodData from './Components/FloodData'; 
 import FloodStatus from './Components/FloodStatus'; 
 import PrivateRoute from './Components/Home/PrivateRoute'; 
+import FloodPredictionForm from './Components/FloodPridiction/FloodPredictionForm';
 
 
 
@@ -41,6 +45,8 @@ function App() {
         <Route path="/flooddata" element={<PrivateRoute><AppLayout><FloodData /></AppLayout></PrivateRoute>} />
         <Route path="/floodstatus" element={<PrivateRoute><AppLayout><FloodStatus /></AppLayout></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><AppLayout><Profile /></AppLayout></PrivateRoute>} />
+        <Route path="/FloodPredictionForm" element={<PrivateRoute><AppLayout><FloodPredictionForm /></AppLayout></PrivateRoute>} />
+
       </Routes>
     </Router>
   );

@@ -78,7 +78,7 @@ const AppLayout = ({ children }) => {
           <h1 className="navbar-title">Flood Prediction and Alert System</h1>
 
           <div className="navbar-links">
-            <Link to="/flooddata" className="nav-link">Home</Link>
+            <Link to="/FloodPredictionForm" className="nav-link">Home</Link>
             <Link to="/floodstatus" className="nav-link">Flood Status</Link>
             <Link to="/reports" className="nav-link">Reports</Link>
             <span className="username">{userName}</span>
