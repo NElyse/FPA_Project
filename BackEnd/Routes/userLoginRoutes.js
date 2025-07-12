@@ -8,7 +8,6 @@ const nodemailer = require('nodemailer');
 const router = express.Router();
 const db = require('../config/db');
 
-// Helper to format dates for MySQL
 function formatDateToMySQL(date) {
   return date.format('YYYY-MM-DD HH:mm:ss');
 }
@@ -20,15 +19,15 @@ router.post('/register', async (req, res) => {
     const checkSql = 'SELECT * FROM users WHERE email = ? OR username = ? OR phone = ?';
     const [existing] = await db.execute(checkSql, [email, username, phone]);
     if (existing.length) {
-      if (existing.some(u => u.email === email))   return res.status(400).json({ error: 'Email already exists.' });
+      if (existing.some(u => u.email === email)) return res.status(400).json({ error: 'Email already exists.' });
       if (existing.some(u => u.username === username)) return res.status(400).json({ error: 'Username already taken.' });
-      if (existing.some(u => u.phone === phone))   return res.status(400).json({ error: 'Phone already registered.' });
+      if (existing.some(u => u.phone === phone)) return res.status(400).json({ error: 'Phone already registered.' });
     }
     const hash = await bcrypt.hash(password, 10);
     await db.execute(
       `INSERT INTO users (full_names,email,username,phone,password_hash,role)
        VALUES (?,?,?,?,?,?)`,
-      [fullNames, email, username, phone, hash, role||'user']
+      [fullNames, email, username, phone, hash, role || 'user']
     );
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
@@ -52,12 +51,14 @@ router.post('/login', async (req, res) => {
     `;
     const [rows] = await db.execute(sql, [identifier, identifier, identifier]);
     if (!rows.length) return res.status(401).json({ error: 'Invalid credentials' });
+
     const user = rows[0];
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) return res.status(401).json({ error: 'Invalid credentials' });
 
     const payload = { id: user.id, username: user.username, email: user.email, role: user.role };
-    const token = jwt.sign(payload, process.env.JWT_SECRET||'secret', { expiresIn: '1h' });
+    const token = jwt.sign(payload, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+
     delete user.password_hash;
     res.json({ token, user });
   } catch (err) {
@@ -66,8 +67,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// FORGOT PASSWORD — send reset link to React client on port 3000
-// Forgot Password
+// FORGOT PASSWORD
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -88,13 +88,12 @@ router.post('/forgot-password', async (req, res) => {
       [user.id, token, createdAtFormatted, expiresAtFormatted]
     );
 
-    // Use CLIENT_URL dynamically from environment
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT),
-      secure: process.env.SMTP_PORT === '465', // true for port 465, false for others
+      secure: process.env.SMTP_PORT === '465',
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -122,23 +121,15 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
-
 // VALIDATE TOKEN
 router.get('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
   try {
-    console.log('Validating:', token);
     const [rows] = await db.execute(
       'SELECT user_id, expires_at FROM password_resets WHERE token = ? ORDER BY created_at DESC LIMIT 1',
       [token]
     );
-    if (!rows.length) return res.status(400).json({ error: 'Invalid or expired token' });
-
-    const expiresAt = new Date(rows[0].expires_at);
-    const now = new Date();
-
-    console.log('Expires:', expiresAt, 'Now:', now);
-    if (expiresAt < now) {
+    if (!rows.length || new Date(rows[0].expires_at) < new Date()) {
       return res.status(400).json({ error: 'Invalid or expired token' });
     }
 
@@ -153,7 +144,6 @@ router.get('/reset-password/:token', async (req, res) => {
 router.post('/reset-password/:token', async (req, res) => {
   const { token } = req.params;
   const { newPassword } = req.body;
-
   if (!newPassword) return res.status(400).json({ error: 'New password is required' });
 
   try {
@@ -179,32 +169,51 @@ router.post('/reset-password/:token', async (req, res) => {
   }
 });
 
-// Update User
+// ✅ UPDATED: Update User
 router.put('/users/:id', async (req, res) => {
   const userId = req.params.id;
   const { full_names, email, username, phone } = req.body;
 
   try {
+    // Check for duplicate values in other users
+    const [duplicates] = await db.execute(
+      `SELECT id FROM users 
+       WHERE (email = ? OR username = ? OR phone = ?) AND id != ?`,
+      [email, username, phone, userId]
+    );
+    if (duplicates.length > 0) {
+      return res.status(400).json({ error: 'Email, username, or phone already in use by another user.' });
+    }
+
     const fields = [];
     const values = [];
 
     if (full_names) { fields.push('full_names = ?'); values.push(full_names); }
-    if (email) { fields.push('email = ?'); values.push(email); }
-    if (username) { fields.push('username = ?'); values.push(username); }
-    if (phone) { fields.push('phone = ?'); values.push(phone); }
+    if (email)       { fields.push('email = ?'); values.push(email); }
+    if (username)    { fields.push('username = ?'); values.push(username); }
+    if (phone)       { fields.push('phone = ?'); values.push(phone); }
 
     fields.push('updated_at = NOW()');
 
-    if (fields.length === 0) return res.status(400).json({ error: 'No fields provided to update' });
+    if (fields.length === 0) {
+      return res.status(400).json({ error: 'No fields provided to update' });
+    }
 
     const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
     values.push(userId);
 
     const [result] = await db.execute(sql, values);
-    if (result.affectedRows === 0) return res.status(404).json({ error: 'User not found' });
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
 
-    const [updatedUsers] = await db.execute('SELECT id, full_names, email, username, phone, role FROM users WHERE id = ?', [userId]);
-    if (updatedUsers.length === 0) return res.status(500).json({ error: 'Failed to fetch updated user' });
+    const [updatedUsers] = await db.execute(
+      'SELECT id, full_names, email, username, phone, role FROM users WHERE id = ?',
+      [userId]
+    );
+    if (!updatedUsers.length) {
+      return res.status(500).json({ error: 'Failed to fetch updated user' });
+    }
 
     res.json({ user: updatedUsers[0] });
   } catch (err) {
