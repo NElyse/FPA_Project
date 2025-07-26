@@ -1,47 +1,181 @@
-.flood-prediction-form {
-  background-color: #ffffffb8;
-  padding: 1.5rem;
-  border-radius: 12px;
-  max-width: 600px;
+/* === Form Container === */
+.fpa-form-container {
+  max-width: 780px;
   margin: 2rem auto;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 2rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1e293b;
 }
 
-.flood-prediction-form form > div {
-  margin-bottom: 12px;
+/* === Title === */
+.fpa-form-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
 }
 
-.flood-prediction-form label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 4px;
+/* === Form Layout === */
+.responsive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.flood-prediction-form input, .flood-prediction-form select {
-  width: 100%;
-  padding: 6px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+/* === Form Row === */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.flood-prediction-form button {
-  background-color: #1e40af;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
+.form-row label {
+  flex: 1 0 160px;
+  font-weight: 600;
+  color: #334155;
+  margin-right: 12px;
+  min-width: 160px;
 }
 
-.flood-prediction-form .result-box {
-  background: #eef;
+/* === Input Fields === */
+.form-row input[type="text"],
+.form-row input[type="date"],
+.form-row input[type="number"],
+.form-row select {
+  flex: 2 0 300px;
   padding: 10px;
-  margin-top: 1rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
   border-radius: 6px;
+  background-color: #ffffff;
+  transition: border 0.3s ease;
 }
 
-.error {
-  color: red;
-  font-weight: bold;
+.form-row input[type="text"]:focus,
+.form-row input[type="date"]:focus,
+.form-row input[type="number"]:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* === Checkboxes === */
+.form-row input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* === Validation Error Text === */
+.error-text {
+  flex-basis: 100%;
+  margin-top: 5px;
+  font-size: 0.875rem;
+  color: #dc2626;
+}
+
+/* === Result Box === */
+.fpa-result {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+/* === Error Box === */
+.fpa-error {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 12px;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 1.25rem;
+  font-weight: 600;
+}
+
+/* === Success Box === */
+.fpa-success {
+  background-color: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+  padding: 12px;
+  text-align: center;
+  border-radius: 6px;
+  margin-top: 1.25rem;
+  font-weight: 600;
+}
+
+/* === Loading Spinner === */
+.spinner {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #3b82f6;
+}
+
+/* === Button Group === */
+.button-group {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.button-group button {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.button-group button:disabled {
+  background-color: #cbd5e1;
+  color: #475569;
+  cursor: not-allowed;
+}
+
+/* === Responsive Design === */
+@media (max-width: 640px) {
+  .form-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-row label,
+  .form-row input,
+  .form-row select {
+    flex: none;
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
 }

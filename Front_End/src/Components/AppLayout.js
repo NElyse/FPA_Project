@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Components/CSS/AppLayout.css';
-import './DataCard';
 
 const AppLayout = ({ children }) => {
   const [userName, setUserName] = useState('');
@@ -23,7 +22,6 @@ const AppLayout = ({ children }) => {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -34,73 +32,52 @@ const AppLayout = ({ children }) => {
   const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
 
   return (
-    <div className="app-layout">
-      {!sidebarVisible && (
-        <button
-          className="sidebar-toggle-button"
-          onClick={toggleSidebar}
-          aria-label="Open sidebar"
-        >
-          ☰
-        </button>
-      )}
-
+    <div className="fpa-layout">
       {sidebarVisible && (
-        <aside className="sidebar">
-          <div className="sidebar-header">
+        <aside className={`fpa-sidebar ${sidebarVisible ? 'open' : 'hidden'}`}>
+          <div className="fpa-sidebar-header">
             Menu
-            <button
-              className="sidebar-close-button"
-              onClick={toggleSidebar}
-              aria-label="Close sidebar"
-            >
-              ☰
-            </button>
+            <button className="fpa-sidebar-close" onClick={toggleSidebar} aria-label="Close sidebar">✕</button>
           </div>
-          <ul className="sidebar-menu">
-            <li className="sidebar-item">Alerts</li>
-            <li className="sidebar-item">Statistics</li>
-            <li className="sidebar-item">Locations</li>
+          <ul className="fpa-sidebar-menu">
+            <li className="fpa-sidebar-item"><Link to="/FloodPredictionForm">Make Prediction</Link></li>
+            <li className="fpa-sidebar-item"><Link to="/floodstatus">Flood Status</Link></li>
+            <li className="fpa-sidebar-item"><Link to="/reports">Reports</Link></li>
           </ul>
         </aside>
       )}
 
-      <div className={`main-content ${sidebarVisible ? '' : 'full-width'}`}>
-        <nav className="navbar">
-          <button
-            className="sidebar-toggle-button-desktop"
-            onClick={toggleSidebar}
-            aria-label="Toggle sidebar"
-          >
-            ☰
-          </button>
+      {!sidebarVisible && (
+        <button className="fpa-toggle-button" onClick={toggleSidebar} aria-label="Open sidebar">☰</button>
+      )}
 
-          <h1 className="navbar-title">Flood Prediction and Alert System</h1>
-
-          <div className="navbar-links">
-            <Link to="/FloodPredictionForm" className="nav-link">Home</Link>
-            <Link to="/floodstatus" className="nav-link">Flood Status</Link>
-            <Link to="/reports" className="nav-link">Reports</Link>
-            <span className="username">{userName}</span>
-
-            <div className="profile-dropdown-wrapper" ref={dropdownRef}>
-              <button className="profile-button" onClick={toggleDropdown}>👤</button>
+      <div className={`fpa-main-wrapper ${!sidebarVisible ? 'full-width' : ''}`}>
+        <header className="fpa-navbar">
+          <button className="fpa-toggle-button-desktop" onClick={toggleSidebar} aria-label="Toggle sidebar">☰</button>
+          <h1 className="fpa-navbar-title">Flood Prediction and Alert System</h1>
+          <div className="fpa-navbar-links">
+            <span className="fpa-username">{userName}</span>
+            <div className="fpa-dropdown-wrapper" ref={dropdownRef}>
+              <button className="fpa-profile-button" onClick={toggleDropdown} aria-label="User profile">👤</button>
               {showDropdown && (
-                <div className="dropdown-content">
-                  <Link to="/profile" className="dropdown-link" onClick={() => setShowDropdown(false)}>Profile</Link>
-                  <Link to="/logout" className="dropdown-link" onClick={() => setShowDropdown(false)}>Logout</Link>
+                <div className="fpa-dropdown">
+                  <Link to="/profile" className="fpa-dropdown-link" onClick={() => setShowDropdown(false)}>Profile</Link>
+                  <Link to="/logout" className="fpa-dropdown-link" onClick={() => {
+                    localStorage.removeItem('user');
+                    setShowDropdown(false);
+                    window.location.href = '/login';
+                  }}>Logout</Link>
                 </div>
               )}
             </div>
-
           </div>
-        </nav>
+        </header>
 
-        <main className="content-area">
+        <main className="fpa-content">
           {children}
         </main>
 
-        <footer className="footer">
+        <footer className="fpa-footer">
           <p>&copy; 2025 Flood Prediction and Alert System | Developed by Elyse and Solange</p>
         </footer>
       </div>

@@ -1,14 +1,30 @@
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+const sql = require('mssql');
 
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
+const config = {
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
+  server: process.env.DB_HOST,
   database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+  options: {
+    encrypt: false,
+    trustServerCertificate: true,
+  },
+  pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
+  }
+};
 
-module.exports = db;
+const pool = new sql.ConnectionPool(config);
+const poolConnect = pool.connect();
+
+module.exports = {
+  sql,
+  pool,
+  poolConnect,
+  request: async () => {
+    await poolConnect;
+    return pool.request();
+  }
+};

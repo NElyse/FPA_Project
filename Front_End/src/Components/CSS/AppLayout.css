@@ -1,29 +1,37 @@
-/* Container layout */
-.app-layout {
+/* === FPA App Layout Scoped Styles === */
+.fpa-layout {
   display: flex;
   height: 100vh;
-  background-color: rgba(245, 247, 250, 0.9); /* Slightly transparent light bg */
   font-family: Arial, sans-serif;
+  background-color: rgba(245, 247, 250, 0.9);
 }
 
-/* Sidebar */
-.sidebar {
+/* === Sidebar === */
+.fpa-sidebar {
   width: 240px;
-  background-color: rgba(30, 64, 175, 0.7); /* Blue-800 with 70% opacity */
-  color: rgba(255, 255, 255, 0.85); /* White text with 85% opacity */
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  box-sizing: border-box;
-  height: 100vh;
   position: fixed;
-  left: 0;
   top: 0;
   bottom: 0;
+  left: 0;
   z-index: 1000;
+  padding: 1rem;
+  background-color: rgba(30, 64, 175, 0.7);
+  color: rgba(255, 255, 255, 0.85);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.sidebar-header {
+.fpa-sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+.fpa-sidebar.open {
+  transform: translateX(0);
+}
+
+.fpa-sidebar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -32,40 +40,41 @@
   margin-bottom: 2rem;
 }
 
-.sidebar-close-button {
+.fpa-sidebar-close {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1.75rem;
+  color: inherit;
+  font-size: 1.5rem;
   cursor: pointer;
-  line-height: 1;
 }
 
-.sidebar-menu {
+.fpa-sidebar-menu {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.sidebar-item {
-  padding: 0.75rem 0;
-  cursor: pointer;
+.fpa-sidebar-item {
+  margin-bottom: 1rem;
   font-size: 1.1rem;
-  transition: color 0.2s ease;
-  color: rgba(255, 255, 255, 0.85);
 }
 
-.sidebar-item:hover {
-  color: rgba(147, 197, 253, 0.7); /* Blue-300 with 70% opacity */
+.fpa-sidebar-item a {
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Sidebar toggle button (when sidebar hidden) */
-.sidebar-toggle-button {
+.fpa-sidebar-item a:hover {
+  color: rgba(147, 197, 253, 0.85);
+}
+
+/* === Toggle Button === */
+.fpa-toggle-button {
   position: fixed;
   top: 1rem;
   left: 1rem;
   background-color: rgba(30, 64, 175, 0.7);
-  color: rgba(255, 255, 255, 0.85);
+  color: white;
   border: none;
   font-size: 1.5rem;
   padding: 0.5rem 0.75rem;
@@ -74,142 +83,133 @@
   z-index: 1100;
 }
 
-/* Main content area */
-.main-content {
-  margin-left: 240px;
-  flex-grow: 1;
+/* === Main Section === */
+.fpa-main-wrapper {
   display: flex;
   flex-direction: column;
+  margin-left: 240px;
+  flex-grow: 1;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7);
   transition: margin-left 0.3s ease;
+  overflow: hidden;
 }
 
-/* When sidebar hidden, main content takes full width */
-.main-content.full-width {
+.fpa-main-wrapper.full-width {
   margin-left: 0 !important;
 }
 
-/* Navbar */
-.navbar {
+/* === Navbar === */
+.fpa-navbar {
+  height: 56px;
+  background-color: rgba(30, 64, 175, 0.7);
+  color: white;
   display: flex;
   align-items: center;
-  background-color: rgba(30, 64, 175, 0.7);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 0 1rem;
-  height: 56px;
-  flex-shrink: 0;
   justify-content: space-between;
+  padding: 0 1rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 240px;
+  z-index: 900;
 }
 
-.sidebar-toggle-button-desktop {
-  display: none;
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-right: 1rem;
+.fpa-main-wrapper.full-width .fpa-navbar {
+  left: 0;
 }
 
-.navbar-title {
+.fpa-navbar-title {
   font-size: 1.25rem;
   font-weight: 600;
-  flex-grow: 1;
 }
 
-.navbar-links {
+.fpa-navbar-links {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.nav-link {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
+.fpa-profile-button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: inherit;
+  cursor: pointer;
 }
 
-.nav-link:hover {
-  color: rgba(147, 197, 253, 0.7);
-}
-
-.username {
-  font-weight: 600;
-  margin-left: 1rem;
-}
-
-.profile-dropdown-wrapper {
+.fpa-dropdown-wrapper {
   position: relative;
 }
 
-.profile-button {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1.4rem;
-  cursor: pointer;
-  margin-left: 1rem;
-}
-
-.dropdown-content {
+.fpa-dropdown {
   position: absolute;
   top: 130%;
   right: 0;
-  background: rgba(255, 255, 255, 0.7);
-  color: rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.95);
+  color: black;
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   border-radius: 4px;
-  min-width: 120px;
   z-index: 1001;
 }
 
-.dropdown-link {
+.fpa-dropdown a {
   display: block;
   padding: 0.5rem 1rem;
-  color: rgba(0, 0, 0, 0.7);
+  color: #1f2937;
   text-decoration: none;
 }
 
-.dropdown-link:hover {
-  background-color: rgba(224, 231, 255, 0.7); /* Light blue */
+.fpa-dropdown a:hover {
+  background-color: rgba(224, 231, 255, 0.7);
 }
 
-/* Content area */
-.content-area {
-  flex-grow: 1;
+/* === Content === */
+.fpa-content {
+  margin-top: 56px;
+  flex: 1;
   overflow-y: auto;
-  background: rgba(255, 255, 255, 0.7);
   padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.7);
   box-sizing: border-box;
 }
 
-/* Footer */
-.footer {
+/* === Footer === */
+.fpa-footer {
   background-color: rgba(30, 64, 175, 0.7);
   color: rgba(255, 255, 255, 0.85);
   padding: 0.75rem 2rem;
   text-align: center;
   font-size: 0.85rem;
-  flex-shrink: 0;
 }
 
-/* Responsive for smaller screens */
+/* === Responsive === */
 @media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    z-index: 1100;
-    height: 100vh;
-    transform: translateX(0);
-    transition: transform 0.3s ease;
+  .fpa-sidebar {
+    transform: translateX(-100%);
   }
 
-  .main-content {
+  .fpa-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .fpa-main-wrapper {
     margin-left: 0 !important;
   }
 
-  .sidebar-toggle-button-desktop {
-    display: inline-block;
+  .fpa-navbar {
+    left: 0 !important;
+  }
+
+  .fpa-navbar-title {
+    font-size: 1rem;
+  }
+
+  .fpa-navbar-links {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .fpa-content {
+    padding: 1rem;
   }
 }
