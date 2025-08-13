@@ -18,10 +18,12 @@ import Profile from './Components/Home/Profile';
 
 
 
-import FloodData from './Components/FloodData'; 
-import FloodStatus from './Components/FloodStatus'; 
+import FloodData from './Components/FloodPridiction/FloodPredictions'; 
+import FloodStatus from './Components/FloodPridiction/FloodStatus'; 
 import PrivateRoute from './Components/Home/PrivateRoute'; 
 import FloodPredictionForm from './Components/FloodPridiction/FloodPredictionForm';
+import RegisterRecipientPage from './Components/FloodPridiction/RegisterRecipientPage';
+import RecipientListPage from './Components/FloodPridiction/RecipientListPage';
 
 
 
@@ -45,7 +47,9 @@ function App() {
         <Route path="/flooddata" element={<PrivateRoute><AppLayout><FloodData /></AppLayout></PrivateRoute>} />
         <Route path="/floodstatus" element={<PrivateRoute><AppLayout><FloodStatus /></AppLayout></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><AppLayout><Profile /></AppLayout></PrivateRoute>} />
-        <Route path="/FloodPredictionForm" element={<PrivateRoute><AppLayout><FloodPredictionForm /></AppLayout></PrivateRoute>} />
+        <Route path="/floodPredictionForm" element={<PrivateRoute><AppLayout><FloodPredictionForm /></AppLayout></PrivateRoute>} />
+        <Route path="/registerRecipientPage" element={<PrivateRoute><AppLayout><RegisterRecipientPage /></AppLayout></PrivateRoute>} />
+        <Route path="/recipientListPage" element={<PrivateRoute><AppLayout><RecipientListPage /></AppLayout></PrivateRoute>} />
 
       </Routes>
     </Router>

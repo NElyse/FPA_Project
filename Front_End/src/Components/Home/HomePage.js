@@ -32,11 +32,9 @@ const bgImages = [
 ];
 
 const featureCards = [
-  { title: "Real-Time Flood Data", desc: "Access up-to-the-minute flood measurements from sensors and satellites.", emoji: "🌊" },
   { title: "Early Warning Alerts", desc: "Receive instant notifications via SMS, email, or app when flood risk is high.", emoji: "🚨" },
   { title: "Community Reporting", desc: "Enable local users to report flood events, improving situational awareness.", emoji: "📢" },
   { title: "Risk Analysis & Prediction", desc: "Advanced algorithms forecast flood risks based on environmental data.", emoji: "📈" },
-  { title: "Interactive Maps", desc: "Visualize flood-prone areas and safe zones with dynamic, layered maps.", emoji: "🗘️" },
   { title: "Historical Data Insights", desc: "Analyze past flood events to plan and improve future disaster management.", emoji: "📚" },
 ];
 
@@ -112,7 +110,7 @@ export default function HomePage() {
 
           <div className="content-card">
             <h5 className="hero-subtitle">Flood Prediction & Alert System</h5>
-            <h1 className="hero-title">Welcome to FPA Dashboard</h1>
+            <h1 className="hero-title">Welcome to FPA SYSYTEM</h1>
             <p className="hero-description">
               Stay informed and prepared with real-time flood data, alerts, and community reports.
             </p>
@@ -179,7 +177,7 @@ export default function HomePage() {
       </main>
 
       <footer className="footer">
-        © {new Date().getFullYear()} Flood Prediction & Alert System (FPA). All rights reserved. Developed by ElSol.
+        © {new Date().getFullYear()} Flood Prediction & Alert System (FPA). All rights reserved. Developed by Elyse.
       </footer>
 
       {isModalOpen && (

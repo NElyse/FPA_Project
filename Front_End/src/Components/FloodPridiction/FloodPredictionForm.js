@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import locationData from "../Home/locations.json"; // your hierarchical location data
 import "../CSS/FloodPredictionForm.css";
 
 const seasonOptions = [
@@ -31,6 +32,7 @@ const classifySeason = (dateString) => {
 };
 
 const FloodPredictionForm = () => {
+  // formData now includes province and district
   const [formData, setFormData] = useState({
     prediction_date: "",
     rainfall_mm: "",
@@ -47,7 +49,14 @@ const FloodPredictionForm = () => {
     is_deforested: false,
     season: "Long Rainy Season",
     location_type: "lowland",
+    province: "",
+    district: "",
+    sector: "",
   });
+
+  // Location cascading states
+  const [districts, setDistricts] = useState([]);
+  const [sectors, setSectors] = useState([]);
 
   const [errors, setErrors] = useState({});
   const [result, setResult] = useState(null);
@@ -56,8 +65,58 @@ const FloodPredictionForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [seasonWasAutoSet, setSeasonWasAutoSet] = useState(false);
 
+  // Handle province change: update districts, clear district & sector
+  const handleProvinceChange = (e) => {
+    const province = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      province,
+      district: "",
+      sector: "",
+    }));
+
+    const foundProvince = locationData.provinces.find((p) => p.name === province);
+    setDistricts(foundProvince ? foundProvince.districts : []);
+    setSectors([]);
+  };
+
+  // Handle district change: update sectors, clear sector
+  const handleDistrictChange = (e) => {
+    const district = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      district,
+      sector: "",
+    }));
+
+    const foundDistrict = districts.find((d) => d.name === district);
+    setSectors(foundDistrict ? foundDistrict.sectors : []);
+  };
+
   const validate = () => {
     const newErrors = {};
+
+    if (formData.prediction_date) {
+      const selectedDate = new Date(formData.prediction_date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        newErrors.prediction_date = "Prediction date cannot be in the past.";
+      }
+    } else {
+      newErrors.prediction_date = "Prediction date is required.";
+    }
+
+    if (!formData.province) {
+      newErrors.province = "Province is required.";
+    }
+    if (!formData.district) {
+      newErrors.district = "District is required.";
+    }
+    if (!formData.sector) {
+      newErrors.sector = "Sector is required.";
+    }
+
     for (const [key, rule] of Object.entries(validationRules)) {
       const value = formData[key];
       if (value === "" || value === null || value === undefined) {
@@ -68,6 +127,7 @@ const FloodPredictionForm = () => {
         newErrors[key] = `${rule.label} must be between ${rule.min} and ${rule.max}.`;
       }
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -84,6 +144,11 @@ const FloodPredictionForm = () => {
       if (name === "prediction_date" && value) {
         updated.season = classifySeason(value);
         setSeasonWasAutoSet(true);
+      }
+
+      if (name === "season" && seasonWasAutoSet) {
+        // User manually changed season, unlock manual edits
+        setSeasonWasAutoSet(false);
       }
 
       return updated;
@@ -141,6 +206,11 @@ const FloodPredictionForm = () => {
       return;
     }
 
+    if (!formData.sector) {
+      setError("❌ Please select a Sector to save.");
+      return;
+    }
+
     const userString = localStorage.getItem("user");
     if (!userString) {
       setError("❌ You must be logged in to save predictions.");
@@ -156,6 +226,7 @@ const FloodPredictionForm = () => {
         prediction_result: result.prediction === 1 ? "Flood Risk" : "Low Risk",
         prediction_probability: result.probability,
         user_id: user.id,
+        prediction_location: formData.sector, // only sector saved as location
       };
 
       await axios.post(
@@ -180,7 +251,12 @@ const FloodPredictionForm = () => {
         is_deforested: false,
         season: "Long Rainy Season",
         location_type: "lowland",
+        province: "",
+        district: "",
+        sector: "",
       });
+      setDistricts([]);
+      setSectors([]);
       setResult(null);
       setSeasonWasAutoSet(false);
     } catch (err) {
@@ -197,13 +273,20 @@ const FloodPredictionForm = () => {
 
       <form onSubmit={handlePredict} className="responsive-form">
         <div className="form-row">
-          <label>Prediction Date: <span style={{ color: "red" }}>*</span></label>
+          <label>
+            Prediction Date: <span style={{ color: "red" }}>*</span>
+          </label>
           <input
             type="date"
             name="prediction_date"
             value={formData.prediction_date}
+            min={new Date().toISOString().split("T")[0]}
             onChange={handleChange}
+            disabled={isLoading}
           />
+          {errors.prediction_date && (
+            <span className="error-text">{errors.prediction_date}</span>
+          )}
         </div>
 
         <div className="form-row">
@@ -212,7 +295,7 @@ const FloodPredictionForm = () => {
             name="season"
             value={formData.season}
             onChange={handleChange}
-            disabled={seasonWasAutoSet}
+            disabled={seasonWasAutoSet || isLoading}
           >
             {seasonOptions.map((s) => (
               <option key={s} value={s}>
@@ -228,6 +311,7 @@ const FloodPredictionForm = () => {
             name="location_type"
             value={formData.location_type}
             onChange={handleChange}
+            disabled={isLoading}
           >
             {locationOptions.map((loc) => (
               <option key={loc} value={loc}>
@@ -237,28 +321,114 @@ const FloodPredictionForm = () => {
           </select>
         </div>
 
+        {/* Province Dropdown */}
+        <div className="form-row">
+          <label>
+            Province: <span style={{ color: "red" }}>*</span>
+          </label>
+          <select
+            name="province"
+            value={formData.province}
+            onChange={handleProvinceChange}
+            disabled={isLoading}
+          >
+            <option value="">-- Select Province --</option>
+            {locationData.provinces.map((prov) => (
+              <option key={prov.name} value={prov.name}>
+                {prov.name}
+              </option>
+            ))}
+          </select>
+          {errors.province && (
+            <span className="error-text">{errors.province}</span>
+          )}
+        </div>
+  
+        {/* District Dropdown */}
+        <div className="form-row">
+          <label>
+            District: <span style={{ color: "red" }}>*</span>
+          </label>
+          <select
+            name="district"
+            value={formData.district}
+            onChange={handleDistrictChange}
+            disabled={!formData.province || isLoading}
+          >
+            <option value="">-- Select District --</option>
+            {districts.map((dist) => (
+              <option key={dist.name} value={dist.name}>
+                {dist.name}
+              </option>
+            ))}
+          </select>
+          {errors.district && (
+            <span className="error-text">{errors.district}</span>
+          )}
+        </div>
+
+        {/* Sector Dropdown */}
+        <div className="form-row">
+          <label>
+            Sector: <span style={{ color: "red" }}>*</span>
+          </label>
+          <select
+            name="sector"
+            value={formData.sector}
+            onChange={handleChange}
+            disabled={!formData.district || isLoading}
+          >
+            <option value="">-- Select Sector --</option>
+            {sectors.map((sector) => (
+              <option key={sector.name} value={sector.name}>
+                {sector.name}
+              </option>
+            ))}
+          </select>
+          {errors.sector && <span className="error-text">{errors.sector}</span>}
+        </div>
+
+        {/* Other form fields except province/district/sector/season/location_type */}
         {Object.entries(formData).map(([key, value]) => {
-          if (["prediction_date", "season", "location_type"].includes(key))
+          if (
+            [
+              "prediction_date",
+              "season",
+              "location_type",
+              "province",
+              "district",
+              "sector",
+            ].includes(key)
+          )
             return null;
 
+         
           return (
             <div key={key} className="form-row">
-              <label>{key.replace(/_/g, " ")}</label>
+              <label htmlFor={key}>
+                {key
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </label>
               {typeof value === "boolean" ? (
                 <input
+                  id={key}
                   type="checkbox"
                   name={key}
                   checked={value}
                   onChange={handleChange}
+                  disabled={isLoading}
                 />
               ) : (
                 <>
                   <input
+                    id={key}
                     type="number"
                     step="any"
                     name={key}
                     value={value}
                     onChange={handleChange}
+                    disabled={isLoading}
                   />
                   {errors[key] && (
                     <span className="error-text">{errors[key]}</span>
@@ -279,7 +449,10 @@ const FloodPredictionForm = () => {
             type="button"
             onClick={handleSave}
             disabled={
-              isLoading || !result || !formData.prediction_date || !seasonWasAutoSet
+              isLoading ||
+              !result ||
+              !formData.prediction_date ||
+              !formData.sector
             }
           >
             Save Prediction
@@ -289,8 +462,13 @@ const FloodPredictionForm = () => {
 
       {result && (
         <div className="fpa-result">
-          <p><strong>Class:</strong> {result.prediction === 1 ? "🚨 Flood Risk" : "✅ Low Risk"}</p>
-          <p><strong>Probability:</strong> {result.probability.toFixed(10)}</p>
+          <p>
+            <strong>Class:</strong>{" "}
+            {result.prediction === 1 ? "🚨 Flood Risk" : "✅ Low Risk"}
+          </p>
+          <p>
+            <strong>Probability:</strong> {result.probability.toFixed(10)}
+          </p>
         </div>
       )}
 

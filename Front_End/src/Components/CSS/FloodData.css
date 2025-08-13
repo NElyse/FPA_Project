@@ -1,15 +1,109 @@
-/* FloodData.css */
-
-/* Basic styling for flood data container */
 .flood-data-container {
-    padding: 20px;
-    background-color: #f4f7fa;
-  }
-  
-  .cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f9fafb;
+}
+
+.flood-data-container h2 {
+  text-align: center;
+  color: #1e3a8a;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.flood-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.3s ease-in-out;
+}
+
+.flood-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.date-text {
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.data-section {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.data-card {
+  flex: 1 1 45%;
+  background-color: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.data-card-title {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.data-card-value {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #1f2937;
+}
+
+.probability {
+  font-size: 0.95rem;
+  color: #374151;
+  margin-top: 0.5rem;
+}
+
+.send-alert-btn {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #1e40af;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  width: 100%;
+}
+
+.send-alert-btn:hover {
+  background-color: #2563eb;
+}
+
+.send-alert-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.danger-card {
+  border: 2px solid #dc2626;
+  background-color: #fef2f2;
+}
+
+/* src/CSS/FloodStatus.css */
+.status-card {
+  border-left-width: 6px;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

@@ -6,6 +6,9 @@ const cors = require('cors');
 const userLoginRoutes = require('./Routes/userLoginRoutes');
 const floodDataRoutes = require('./Routes/floodDataRoutes');
 const floodPridictionRoutes = require("./Routes/FloodPridictionRoutes");
+const RecipientsRoutes = require("./Routes/RecipientsRoutes");
+const SendAlertRoutes = require("./Routes/SendAlertRoutes");
+
 
 
 const app = express();
@@ -17,6 +20,9 @@ app.use(express.json());
 app.use('/api/userLoginRoutes', userLoginRoutes);
 app.use('/api/floodDataRoutes', floodDataRoutes);
 app.use("/api/floodPridictionRoutes", floodPridictionRoutes);
+app.use("/api/RecipientsRoutes", RecipientsRoutes);
+app.use("/api/sendAlertRoutes", SendAlertRoutes);
+
 
 // Serve React build
 app.use(express.static(path.join(__dirname, '../Front_End/build')));

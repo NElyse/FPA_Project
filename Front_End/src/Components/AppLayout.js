@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../Components/CSS/AppLayout.css';
+import './CSS/AppLayout.css';
 
 const AppLayout = ({ children }) => {
   const [userName, setUserName] = useState('');
@@ -40,9 +40,10 @@ const AppLayout = ({ children }) => {
             <button className="fpa-sidebar-close" onClick={toggleSidebar} aria-label="Close sidebar">✕</button>
           </div>
           <ul className="fpa-sidebar-menu">
-            <li className="fpa-sidebar-item"><Link to="/FloodPredictionForm">Make Prediction</Link></li>
+            <li className="fpa-sidebar-item"><Link to="/flooddata">Dashboard</Link></li>
+            <li className="fpa-sidebar-item"><Link to="/recipientListPage">Recipients</Link></li>
+            <li className="fpa-sidebar-item"><Link to="/floodPredictionForm">Make Prediction</Link></li>
             <li className="fpa-sidebar-item"><Link to="/floodstatus">Flood Status</Link></li>
-            <li className="fpa-sidebar-item"><Link to="/reports">Reports</Link></li>
           </ul>
         </aside>
       )}
@@ -78,7 +79,7 @@ const AppLayout = ({ children }) => {
         </main>
 
         <footer className="fpa-footer">
-          <p>&copy; 2025 Flood Prediction and Alert System | Developed by Elyse and Solange</p>
+          <p>&copy; 2025 Flood Prediction and Alert System | Developed by Elyse</p>
         </footer>
       </div>
     </div>

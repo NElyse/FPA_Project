@@ -1,31 +1,75 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
+const { sql, pool, poolConnect } = require('../config/db');
 
-// Get Flood Data
+// Get user-specific flood predictions
 router.get('/selectFloodData', async (req, res) => {
+  await poolConnect;
+
+  const userId = req.headers['user-id'];
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing user ID in header' });
+  }
+
   try {
-    const [results] = await db.execute(
-      'SELECT id, water_level, rainfall, flood_risk, recorded_at FROM flood_data ORDER BY id DESC'
-    );
-    res.json(results);
+    const request = pool.request();
+    request.input('userId', sql.Int, userId);
+
+    const result = await request.query(`
+      SELECT TOP 100
+        id,
+        prediction_date,
+        season,
+        location_type,
+        rainfall_mm,
+        water_level_m,
+        soil_moisture,
+        temp_c,
+        humidity,
+        wind_speed,
+        pressure,
+        has_river,
+        has_lake,
+        has_poor_drainage,
+        is_urban,
+        is_deforested,
+        prediction_result,
+        prediction_probability,
+        user_id,
+        created_at,
+        prediction_location
+      FROM FloodPredictions
+      WHERE user_id = @userId
+      ORDER BY prediction_probability DESC
+    `);
+
+    res.status(200).json(result.recordset);
   } catch (err) {
-    res.status(500).send('Error fetching data');
+    console.error('Error fetching flood predictions:', err);
+    res.status(500).json({ error: 'Error fetching flood predictions' });
   }
 });
 
-// Get Flood Status
+
 router.get('/selectFloodStatus', async (req, res) => {
+  await poolConnect;
+
   try {
-    const [results] = await db.execute(
-      'SELECT id, risk_level, location, timestamp FROM flood_status ORDER BY timestamp DESC'
-    );
-    if (results.length === 0)
-      return res.status(404).json({ message: 'No flood status records found' });
-    res.status(200).json(results);
+    const request = pool.request();
+    const result = await request.query(`
+      SELECT TOP 10
+        id,
+        prediction_location AS location,
+        prediction_result AS risk_level,
+        created_at AS timestamp
+      FROM FloodPredictions
+      ORDER BY created_at DESC
+    `);
+
+    res.status(200).json(result.recordset); // Make sure this is an array
   } catch (err) {
-    res.status(500).json({ error: 'Error fetching data' });
+    console.error('Error fetching flood status:', err);
+    res.status(500).json({ error: 'Failed to fetch flood status' });
   }
 });
-
 module.exports = router;
